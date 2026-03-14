@@ -55,10 +55,10 @@
 
 ---
 
-### 🎮 nyviiq
+### 🎮 ScriptShare
 
-> **Building the future of gaming peripherals.**  
-> [![nyviiq.com](https://img.shields.io/badge/nyviiq.com-a855f7?style=flat-square&logo=vercel&logoColor=white)](https://nyviiq.com)
+> **Building the future of gaming Forums.**  
+> [![ScriptShare](https://img.shields.io/badge/sciptshare-a855f7?style=flat-square&logo=vercel&logoColor=white)](http://94.249.230.116/)
 
 ---
 
