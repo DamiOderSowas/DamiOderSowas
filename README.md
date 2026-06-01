@@ -1,71 +1,52 @@
-<div align="center">
+<h1 align="center">Hey 👋What's Up?</h1>
 
-![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12&height=160&section=header&text=Hey%2C%20I'm%20Damien%20👋&fontSize=42&fontAlignY=65&fontColor=ffffff&animation=twinkling)
-
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=A855F7&center=true&vCenter=true&width=500&lines=Developer+%26+Bot+Builder+🤖;Founder+of+nyviiq+🎮;Always+Building+Something+⚡;Learning+Every+Day+📚)](https://git.io/typing-svg)
-
-</div>
-
----
-
-### 🇩🇪 About Me
-
-> Developer from Germany — I build Discord bots, web tools & gaming accessories.  
-> Always learning, always shipping.
-
----
-
-### 🛠 Tech Stack
-
-![discord.js](https://img.shields.io/badge/discord.js-5865F2?style=flat-square&logo=discord&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-22c55e?style=flat-square&logo=nodedotjs&logoColor=white)
-![HTML/CSS](https://img.shields.io/badge/HTML%2FCSS-f97316?style=flat-square&logo=html5&logoColor=white)
-![Git](https://img.shields.io/badge/Git-ef4444?style=flat-square&logo=git&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux%2FVPS-eab308?style=flat-square&logo=linux&logoColor=black)
-
----
-
-### 📚 Currently Learning
-
-| | Stack | Focus |
-|---|---|---|
-| 🔵 | **discord.js** | bots, slash commands, interactions |
-| 🟡 | **HTML / CSS / JS** | frontend fundamentals |
-| 🟢 | **Node.js** | backend & server-side logic |
-
----
-
-### 🚀 Projects
-
-#### ⚡ Content Platform *(upcoming)*
-> A platform built for content creators — currently in development. More details soon.  
-> `web` `node.js` `in progress`
-
----
-
-### 📊 GitHub Stats
+###
 
 <div align="center">
-
-[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=DamiOderSowas&theme=dracula&count_private=true&show_icons=true&hide=contribs)](https://github.com/DamiOderSowas)
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=DamiOderSowas&theme=dracula&layout=compact&hide=python)](https://github.com/DamiOderSowas)
-
+  <img src="https://skillicons.dev/icons?i=ts" height="60" alt="typescript logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=nextjs" height="60" alt="nextjs logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=tailwind" height="60" alt="tailwindcss logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/storybook/storybook-original.svg" height="60" alt="storybook logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=graphql" height="60" alt="graphql logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=go" height="60" alt="go logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=rust" height="60" alt="rust logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=nestjs" height="60" alt="nestjs logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=py" height="60" alt="python logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=aws" height="60" alt="amazonwebservices logo"  />
 </div>
 
----
-
-### 🎮 ScriptShare
-
-> **Building the future of gaming Forums.**  
-> [![ScriptShare](https://img.shields.io/badge/sciptshare-a855f7?style=flat-square&logo=vercel&logoColor=white)](http://94.249.230.116/)
-
----
+###
 
 <div align="center">
-
-*joined github · december 2022 · made with 💜 in germany*
-
-![footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12&height=80&section=footer)
-
+  <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="linkedin logo"  />
+  <img src="https://img.shields.io/static/v1?message=Twitter&logo=twitter&label=&color=1DA1F2&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="twitter logo"  />
+  <img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="discord logo"  />
+  <img src="https://img.shields.io/static/v1?message=Twitch&logo=twitch&label=&color=9146FF&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="twitch logo"  />
+  <img src="https://img.shields.io/static/v1?message=dev.to&logo=dev.to&label=&color=0A0A0A&logoColor=white&labelColor=&style=for-the-badge" height="25" alt="devto logo"  />
 </div>
+
+###
+
+<div align="center">
+  <img src="https://streak-stats.demolab.com?user=maurodesouza&locale=en&mode=daily&theme=dracula&hide_border=false&border_radius=5&order=3" height="150" alt="streak graph"  />
+  <img src="https://raw.githubusercontent.com/maurodesouza/maurodesouza/trophy-output/trophy.svg" height="150" alt="trophy graph"  />
+</div>
+
+###
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/maurodesouza/maurodesouza/pacman-output/pacman-contribution-graph-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/maurodesouza/maurodesouza/pacman-output/pacman-contribution-graph.svg">
+  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/maurodesouza/maurodesouza/pacman-output/pacman-contribution-graph.svg">
+</picture>
+
+###
