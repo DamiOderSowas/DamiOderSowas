@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/YOUR_USERNAME">
+  <a href="https://github.com/DamiOderSowas">
     <img src="https://img.shields.io/badge/GitHub-Profile-black?style=for-the-badge&logo=github">
   </a>
 </p>
@@ -50,7 +50,7 @@ Working with Linux servers and VPS infrastructure
 
 ### AufGekaut
 
-Currently employed at **AufGekaut**.
+Currently employed at **@AufGekaut**.
 
 Responsibilities include technical tasks, server management and supporting ongoing development projects.
 
@@ -59,8 +59,8 @@ Responsibilities include technical tasks, server management and supporting ongoi
 ## GitHub Statistics
 
 <p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=YOUR_USERNAME&show_icons=true&hide_border=true" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_USERNAME&layout=compact&hide_border=true" />
+  <img height="165" src="https://github-readme-stats.vercel.app/api?username=DamiOderSowas&show_icons=true&hide_border=true" />
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=DamiOderSowas&layout=compact&hide_border=true" />
 </p>
 
 ---
@@ -68,7 +68,7 @@ Responsibilities include technical tasks, server management and supporting ongoi
 ## Contact
 
 <p>
-  <a href="https://github.com/YOUR_USERNAME">
+  <a href="https://github.com/DamiOderSowas">
     <img src="https://skillicons.dev/icons?i=github" width="40" />
   </a>
 </p>
