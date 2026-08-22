@@ -1,0 +1,5 @@
+name: NetworkAntiVPN
+main: de.justsimplenetworks.antivpn.integration.bungeecord.BungeeAntiVpnPlugin
+version: 1.0.0-SNAPSHOT
+author: JustSimpleNetworks
+description: BungeeCord compatibility layer for NetworkAntiVPN (Velocity is the primary/recommended proxy).

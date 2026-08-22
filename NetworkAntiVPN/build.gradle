@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group = 'de.justsimplenetworks'
+    version = '1.0.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    ext {
+        junitVersion = '5.11.4'
+        mockitoVersion = '5.15.2'
+        snakeyamlVersion = '2.3'
+        gsonVersion = '2.11.0'
+        slf4jVersion = '2.0.16'
+    }
+}

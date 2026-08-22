@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+repositories {
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    implementation project(':antivpn-core')
+    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
+    compileOnly "org.slf4j:slf4j-api:${slf4jVersion}"
+}
+
+shadowJar {
+    archiveBaseName.set('NetworkAntiVPN-Paper')
+    archiveClassifier.set('')
+    relocate 'org.yaml.snakeyaml', 'de.justsimplenetworks.antivpn.libs.snakeyaml'
+    relocate 'com.google.gson', 'de.justsimplenetworks.antivpn.libs.gson'
+    dependencies {
+        exclude(dependency('org.slf4j:slf4j-api'))
+    }
+}
+
+build.dependsOn shadowJar
+
+processResources {
+    filteringCharset = 'UTF-8'
+}

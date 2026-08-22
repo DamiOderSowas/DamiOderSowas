@@ -1,0 +1,113 @@
+# =============================================================================
+#  NetworkAntiVPN - messages.yml
+#  JustSimpleNetworks
+# =============================================================================
+#
+#  Every player- and staff-facing string this plugin sends goes through this
+#  file - nothing is hard-coded in Java. "&" introduces legacy Minecraft
+#  color codes (e.g. &c = red, &a = green, &7 = gray); each platform adapter
+#  translates them to its native chat component format.
+#
+#  Placeholders use {curly-brace} syntax and are listed in a comment above
+#  each key that uses one. See docs/COMMANDS.md and docs/DECISIONS.md.
+#
+# =============================================================================
+
+# Prepended to every message sent by this plugin.
+prefix: "&8[&bAntiVPN&8] &r"
+
+# -----------------------------------------------------------------------------
+#  Connection-decision messages. Shown to the connecting player as the
+#  disconnect/kick reason (blocked-*, rate-limited, verification-required) or
+#  as an in-game message (bypass-active, whitelisted, allowed-warning).
+#  See de.justsimplenetworks.antivpn.decision.DecisionMessageKeys for exactly
+#  which decision maps to which key.
+# -----------------------------------------------------------------------------
+blocked-vpn: "&cYou have been blocked because a VPN was detected on your connection."
+blocked-proxy: "&cYou have been blocked because a proxy was detected on your connection."
+blocked-tor: "&cYou have been blocked because your connection is using the Tor network."
+blocked-datacenter: "&cYour connection was flagged as coming from a datacenter and could not be verified."
+blocked-hosting: "&cYour connection was flagged as coming from a hosting provider and could not be verified."
+blocked-residential-proxy: "&cYour connection was flagged as a residential proxy and could not be verified."
+blocked-country: "&cConnections from your country/region are not permitted on this network."
+blocked-blacklist: "&cYou have been blocked. If you believe this is an error, please contact staff."
+blocked-risk: "&cYour connection was blocked due to a high risk score. If you believe this is an error, please contact staff."
+blocked-generic: "&cYour connection was blocked. If you believe this is an error, please contact staff."
+# Shown when every provider failed and fallback.policy is FAIL_CLOSED or REQUIRE_VERIFICATION.
+provider-error: "&cConnection verification is temporarily unavailable. Please try again shortly."
+verification-required: "&eAdditional verification is required before you can join. Please contact staff."
+rate-limited: "&cToo many connection attempts. Please wait a moment before trying again."
+bypass-active: "&aYou currently have an active AntiVPN bypass."
+whitelisted: "&aYour connection is whitelisted."
+# Shown as an in-game chat message after joining (connection was allowed but flagged).
+allowed-warning: "&eYour connection was flagged as elevated risk. Some features may be restricted."
+# Internal-only key for a fully silent allow; not shown to players.
+allowed-silent: ""
+
+# -----------------------------------------------------------------------------
+#  General / command feedback
+# -----------------------------------------------------------------------------
+no-permission: "&cYou do not have permission to use this command."
+player-not-found: "&cThat player could not be found online."
+invalid-ip: "&cThat is not a valid IPv4 or IPv6 address."
+invalid-duration: "&cInvalid duration. Examples: 30s, 10m, 1h, 1d, 7d."
+reload: "&aNetworkAntiVPN configuration reloaded."
+
+# -----------------------------------------------------------------------------
+#  /antivpn command output
+# -----------------------------------------------------------------------------
+commands:
+  help-header: "&b--- NetworkAntiVPN --- &7Use /antivpn <check|checkip|inspect|debug|reload|status|providers|cache|whitelist|blacklist|bypass|trust|untrust>"
+  usage-check: "&cUsage: /antivpn check <player>"
+  usage-checkip: "&cUsage: /antivpn checkip <ip>"
+  usage-inspect: "&cUsage: /antivpn inspect <player>"
+  usage-debug: "&cUsage: /antivpn debug <player>"
+  usage-whitelist: "&cUsage: /antivpn whitelist <add|remove|list> [player|ip|cidr] [duration]"
+  usage-blacklist: "&cUsage: /antivpn blacklist <add|remove|list> [player|ip|cidr|asn] [duration]"
+  usage-bypass: "&cUsage: /antivpn bypass <player> <duration> | /antivpn bypass <remove|list> [player]"
+  usage-trust: "&cUsage: /antivpn trust <player>"
+  usage-untrust: "&cUsage: /antivpn untrust <player>"
+
+  # placeholders: {player}, {ip}
+  report-header: "&b--- AntiVPN report for {player} ({ip}) ---"
+  report-no-detection: "&7No detection was performed for this decision (whitelist/blacklist/bypass/rate-limit short-circuit)."
+  # placeholders: {country}, {continent}
+  report-country: "&7Country: &f{country} &7Continent: &f{continent}"
+  # placeholders: {asn}, {isp}, {org}
+  report-network: "&7ASN: &f{asn} &7ISP: &f{isp} &7Org: &f{org}"
+  # placeholders: {vpn}, {proxy}, {hosting}, {datacenter}, {tor}, {residential_proxy}
+  report-flags: "&7VPN: &f{vpn} &7Proxy: &f{proxy} &7Hosting: &f{hosting} &7Datacenter: &f{datacenter} &7Tor: &f{tor} &7ResProxy: &f{residential_proxy}"
+  # placeholders: {provider}, {status}, {cached}, {latency}
+  report-provider: "&7  - {provider}: &f{status} &7(cached: {cached}, latency: {latency})"
+  # placeholders: {score}, {level}
+  report-risk: "&7Risk score: &f{score}/100 &7({level})"
+  # placeholders: {decision}, {reason}
+  report-decision: "&7Decision: &f{decision} &7Reason: &f{reason}"
+
+  status-header: "&b--- NetworkAntiVPN status ---"
+  providers-header: "&b--- Providers ---"
+  # placeholders: {name}, {enabled}, {status}, {latency}, {errors}
+  providers-entry: "&7 - {name}: enabled={enabled} status={status} avgLatency={latency} errors={errors}"
+
+  cache-cleared: "&aDetection cache cleared."
+  # placeholders: {size}, {max}, {hits}, {misses}, {hitrate}
+  cache-status: "&7Cache: &f{size}/{max} entries &7hits={hits} misses={misses} hitrate={hitrate}%"
+
+  # placeholders: {target}
+  whitelist-added: "&aAdded {target} to the whitelist."
+  whitelist-removed: "&aRemoved {target} from the whitelist."
+  whitelist-list-header: "&b--- Whitelist entries ---"
+
+  blacklist-added: "&aAdded {target} to the blacklist."
+  blacklist-removed: "&aRemoved {target} from the blacklist."
+  blacklist-list-header: "&b--- Blacklist entries ---"
+
+  entry-not-found: "&cNo matching entry found for {target}."
+
+  bypass-list-header: "&b--- Active bypasses ---"
+  bypass-removed: "&aRemoved the active bypass for {target}."
+  # placeholders: {target}, {duration}
+  bypass-active: "&aGranted {target} a bypass for {duration}."
+
+  trust-added: "&aMarked {target} as trusted (added to the whitelist)."
+  untrust-removed: "&aRemoved trust for {target}."

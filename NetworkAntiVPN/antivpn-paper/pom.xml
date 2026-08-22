@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>de.justsimplenetworks</groupId>
+    <artifactId>antivpn-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>antivpn-paper</artifactId>
+  <packaging>jar</packaging>
+  <name>NetworkAntiVPN Paper</name>
+  <description>
+    Paper backend integration. Reuses the decision the proxy already
+    computed when available; otherwise runs the full pipeline itself on
+    AsyncPlayerPreLoginEvent, so this jar also works standalone on a Paper
+    server without any proxy in front of it.
+  </description>
+
+  <properties>
+    <paper.api.version>1.21.4-R0.1-SNAPSHOT</paper.api.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>papermc</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.justsimplenetworks</groupId>
+      <artifactId>antivpn-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>${paper.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Not shaded: modern Paper already ships a working SLF4J binding
+         (backed by its Log4j2 core) on the server classpath, so plugins
+         must not bundle their own SLF4J implementation. -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>NetworkAntiVPN-Paper-${project.version}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <artifactSet>
+                <includes>
+                  <include>de.justsimplenetworks:antivpn-core</include>
+                  <include>org.yaml:snakeyaml</include>
+                  <include>com.google.code.gson:gson</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.yaml.snakeyaml</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.snakeyaml</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.gson</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.gson</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

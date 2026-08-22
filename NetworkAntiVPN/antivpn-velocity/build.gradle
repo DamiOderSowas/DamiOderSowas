@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+repositories {
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    implementation project(':antivpn-core')
+    compileOnly 'com.velocitypowered:velocity-api:3.4.0-SNAPSHOT'
+}
+
+shadowJar {
+    archiveBaseName.set('NetworkAntiVPN-Velocity')
+    archiveClassifier.set('')
+    relocate 'org.yaml.snakeyaml', 'de.justsimplenetworks.antivpn.libs.snakeyaml'
+    relocate 'com.google.gson', 'de.justsimplenetworks.antivpn.libs.gson'
+    dependencies {
+        exclude(dependency('org.slf4j:slf4j-api'))
+    }
+}
+
+build.dependsOn shadowJar
