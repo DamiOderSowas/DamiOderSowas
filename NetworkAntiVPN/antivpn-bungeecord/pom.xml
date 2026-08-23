@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>de.justsimplenetworks</groupId>
+    <artifactId>antivpn-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>antivpn-bungeecord</artifactId>
+  <packaging>jar</packaging>
+  <name>NetworkAntiVPN BungeeCord</name>
+  <description>
+    BungeeCord compatibility layer. Velocity remains the primary/recommended
+    proxy; this module exists for networks that have not yet migrated off
+    BungeeCord and mirrors the Velocity integration's behaviour as closely
+    as BungeeCord's API allows.
+  </description>
+
+  <properties>
+    <bungeecord.api.version>1.21-R0.1-SNAPSHOT</bungeecord.api.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>papermc</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+    <repository>
+      <id>sonatype-oss-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.justsimplenetworks</groupId>
+      <artifactId>antivpn-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>${bungeecord.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- BungeeCord has no SLF4J binding of its own (it logs via
+         java.util.logging), so antivpn-core's SLF4J calls need one shaded
+         in; slf4j-jdk14 routes them into java.util.logging, which Bungee's
+         console already handles. -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>NetworkAntiVPN-BungeeCord-${project.version}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <artifactSet>
+                <includes>
+                  <include>de.justsimplenetworks:antivpn-core</include>
+                  <include>org.yaml:snakeyaml</include>
+                  <include>com.google.code.gson:gson</include>
+                  <include>org.slf4j:slf4j-jdk14</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.yaml.snakeyaml</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.snakeyaml</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.gson</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.gson</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

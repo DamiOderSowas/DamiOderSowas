@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>de.justsimplenetworks</groupId>
+    <artifactId>antivpn-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>antivpn-purpur</artifactId>
+  <packaging>jar</packaging>
+  <name>NetworkAntiVPN Purpur</name>
+  <description>
+    Purpur backend integration. Purpur's plugin API is a strict superset of
+    Paper's, so this module only supplies Purpur-branded plugin metadata and
+    a thin subclass of the Paper plugin - all detection logic lives in
+    antivpn-core and antivpn-paper. Installing antivpn-paper's jar directly
+    on a Purpur server also works; use this module when you want NetworkAntiVPN
+    to identify itself as Purpur-specific (e.g. in /plugins output) or want a
+    place to add Purpur-only enhancements later.
+  </description>
+
+  <properties>
+    <paper.api.version>1.21.4-R0.1-SNAPSHOT</paper.api.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>papermc</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.justsimplenetworks</groupId>
+      <artifactId>antivpn-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.justsimplenetworks</groupId>
+      <artifactId>antivpn-paper</artifactId>
+      <version>${antivpn.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>${paper.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>NetworkAntiVPN-Purpur-${project.version}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <artifactSet>
+                <includes>
+                  <include>de.justsimplenetworks:antivpn-core</include>
+                  <include>de.justsimplenetworks:antivpn-paper</include>
+                  <include>org.yaml:snakeyaml</include>
+                  <include>com.google.code.gson:gson</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.yaml.snakeyaml</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.snakeyaml</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.gson</pattern>
+                  <shadedPattern>de.justsimplenetworks.antivpn.libs.gson</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,285 @@
+# =============================================================================
+#  NetworkAntiVPN - config.yml
+#  JustSimpleNetworks
+# =============================================================================
+#
+#  This file is copied into your plugin's data folder the first time it
+#  starts. Every option below is read by de.justsimplenetworks.antivpn.config
+#  .AntiVpnConfig - see docs/CONFIGURATION.md for the full reference and
+#  docs/ARCHITECTURE.md for how these sections fit into the pipeline:
+#
+#    rate-limit -> bypass -> whitelist -> blacklist (ip/cidr/player)
+#      -> cache/detection -> blacklist (asn) -> country filter
+#      -> risk scoring -> decision engine
+#
+#  Reload most of this file at runtime with /antivpn reload (whitelist,
+#  blacklist, countries, risk-scoring, decisions, messages). Changing
+#  "providers" or thread-pool sizing requires a restart - see
+#  docs/TROUBLESHOOTING.md.
+#
+# =============================================================================
+
+general:
+  # Master on/off switch. When false, every connection is allowed and no
+  # detection runs at all - useful for emergency rollback.
+  enabled: true
+  # Verbose internal logging (provider request/response summaries, pipeline
+  # timing). Does NOT print API keys or full response bodies. See
+  # docs/SECURITY.md.
+  debug: false
+
+# -----------------------------------------------------------------------------
+#  Detection pipeline behaviour
+# -----------------------------------------------------------------------------
+detection:
+  # Fraction (0.0-1.0) of weighted, confidence-adjusted provider agreement
+  # required before an aggregated flag (vpn/proxy/hosting/...) is considered
+  # "true". 0.5 = simple majority.
+  provider-agreement-threshold: 0.5
+  # Hard per-provider timeout. A provider that does not answer in time is
+  # excluded from the vote for that connection - it never blocks the pipeline.
+  per-provider-timeout-seconds: 3
+  # Upper bound on how many provider HTTP requests may be in flight at once,
+  # across all providers and all connecting players.
+  max-concurrent-provider-requests: 16
+
+# Safety net around the whole detection+scoring+decision pipeline, in case a
+# component misbehaves. See fallback.policy for what happens if this timeout
+# (or every provider) is hit.
+timeouts:
+  overall-analysis-seconds: 5
+
+# -----------------------------------------------------------------------------
+#  Providers
+# -----------------------------------------------------------------------------
+#  Every provider is either:
+#    - an HTTP provider: set url-template (must contain the literal "{ip}"
+#      placeholder) and this plugin will call it via
+#      providers.ConfigurableHttpDetectionProvider - no vendor-specific
+#      endpoint is hard-coded anywhere in this project, you provide it;
+#    - the bundled mock provider: omit url-template entirely. It performs NO
+#      network calls and reports "no verdict" for every IP - useful to wire
+#      up and test the whole plugin (cache, whitelist, decisions, commands)
+#      before you have a real provider contract. It ships disabled.
+#
+#  Secrets: never put an API key directly in this file. Set api-key-env to
+#  the name of an environment variable (e.g. ANTIVPN_PROVIDER_EXAMPLE_KEY)
+#  and export it in your server's process environment / systemd unit /
+#  Docker secret instead. See docs/SECURITY.md and docs/PROVIDERS.md.
+providers:
+  mock:
+    enabled: false
+    priority: 100
+    weight: 1.0
+    timeout-seconds: 3
+    rate-limit-per-minute: 0
+    capabilities: []
+
+  # Example HTTP provider shape - disabled and unconfigured out of the box.
+  # Copy this block, rename it, and fill in a real contract's URL/response
+  # shape to enable real VPN/proxy/hosting/Tor detection.
+  example:
+    enabled: false
+    priority: 10
+    weight: 1.5
+    timeout-seconds: 3
+    rate-limit-per-minute: 60
+    capabilities: [VPN, PROXY, HOSTING, DATACENTER, TOR, RESIDENTIAL_PROXY, COUNTRY, ASN, ISP, ORGANIZATION, REPUTATION]
+    # Must contain the literal "{ip}" placeholder. Must not put "{ip}" in the
+    # host/authority part of the URL (rejected as an SSRF risk at startup).
+    url-template: ""
+    api-key-env: "ANTIVPN_PROVIDER_EXAMPLE_KEY"
+    api-key-header: "Authorization"
+    api-key-query-param: ""
+    # Maps a dot-notation JSON response path to a DetectionResult field.
+    # Valid target field names: vpn, proxy, hosting, datacenter, tor,
+    # residentialProxy, residential, country, continent, isp, organization,
+    # hostname, asn, riskScore.
+    field-mapping:
+      "security.vpn": vpn
+      "security.proxy": proxy
+      "security.tor": tor
+      "network.hosting": hosting
+      "network.datacenter": datacenter
+      "location.country": country
+      "location.continent": continent
+      "network.asn": asn
+      "network.isp": isp
+      "network.organization": organization
+      "risk.score": riskScore
+
+# -----------------------------------------------------------------------------
+#  Cache
+# -----------------------------------------------------------------------------
+cache:
+  enabled: true
+  # How long an aggregated verdict for an IP stays valid.
+  ttl-seconds: 3600
+  max-entries: 10000
+  cleanup-interval-seconds: 60
+  # Per-provider, per-IP cache (lets a single provider's answer be reused
+  # even across a full re-aggregation, e.g. after a config reload).
+  provider-cache-ttl-seconds: 3600
+  provider-cache-max-entries: 20000
+
+# -----------------------------------------------------------------------------
+#  Risk scoring - point contribution of each factor toward the 0-100 score.
+#  See docs/RISK-SCORING.md for the full explanation of every factor.
+# -----------------------------------------------------------------------------
+risk-scoring:
+  weights:
+    VPN: 45
+    PROXY: 40
+    TOR: 60
+    DATACENTER: 30
+    HOSTING: 25
+    RESIDENTIAL_PROXY: 50
+    IP_REPUTATION: 20
+    PROVIDER_AGREEMENT: 10
+    PROVIDER_DISAGREEMENT: 5
+    COUNTRY_RISK: 15
+    HISTORICAL_DETECTION: 15
+
+# -----------------------------------------------------------------------------
+#  Decisions - fully configurable rule table. Rules are evaluated in order;
+#  the first matching trigger wins. See docs/DECISIONS.md.
+#
+#  trigger:  VPN | PROXY | HOSTING | DATACENTER | TOR | RESIDENTIAL_PROXY |
+#            RESIDENTIAL | RISK_SAFE | RISK_LOW | RISK_MEDIUM | RISK_HIGH |
+#            RISK_CRITICAL | UNKNOWN
+#  decision: ALLOW | ALLOW_WITH_LOG | ALLOW_WITH_WARNING |
+#            REQUIRE_VERIFICATION | TEMPORARY_BLOCK | BLOCK | BYPASS |
+#            RATE_LIMITED
+# -----------------------------------------------------------------------------
+decisions:
+  rules:
+    - trigger: TOR
+      decision: BLOCK
+    - trigger: VPN
+      decision: BLOCK
+    - trigger: PROXY
+      decision: BLOCK
+    - trigger: RESIDENTIAL_PROXY
+      decision: REQUIRE_VERIFICATION
+    - trigger: DATACENTER
+      decision: REQUIRE_VERIFICATION
+    - trigger: HOSTING
+      decision: REQUIRE_VERIFICATION
+    - trigger: RISK_CRITICAL
+      decision: BLOCK
+    - trigger: RISK_HIGH
+      decision: REQUIRE_VERIFICATION
+    - trigger: RISK_MEDIUM
+      decision: ALLOW_WITH_WARNING
+  # Applied when no rule above matched (a clean, unremarkable connection).
+  default-decision: ALLOW_WITH_LOG
+
+# -----------------------------------------------------------------------------
+#  Countries - EU-only / Europe-only / allow- and blocklists. See
+#  docs/COUNTRY-FILTER.md for the exact EU/Europe country lists.
+# -----------------------------------------------------------------------------
+countries:
+  eu-only: false
+  # Only relevant if eu-only is false: allows the wider Europe continent
+  # (EU members + UK, Switzerland, Norway, Iceland, Balkan states, ...).
+  europe-only: false
+  # Block a connection if the provider(s) could not resolve any country at all.
+  block-unknown-country: false
+  allowed-countries: []
+  blocked-countries: []
+  allowed-continents: []
+  blocked-continents: []
+  # Doesn't block by itself - feeds the COUNTRY_RISK risk-scoring factor.
+  high-risk-countries: []
+  # Per-server overrides (server name as configured in your proxy). A server
+  # entry here completely replaces the global policy for that server.
+  servers: {}
+  # Per-server-group overrides (used if no per-server override matches).
+  server-groups: {}
+
+# -----------------------------------------------------------------------------
+#  Static whitelist / blacklist entries. Always evaluated before any block
+#  decision; blacklist has higher priority than detection but whitelist wins
+#  over blacklist. See docs/WHITELIST.md and docs/BLACKLIST.md.
+#  Entries added at runtime via /antivpn whitelist|blacklist are stored
+#  separately in whitelist.json / blacklist.json in the data folder and are
+#  NOT written back into this file.
+# -----------------------------------------------------------------------------
+whitelist:
+  ips: []
+  cidrs: []
+  players: []
+  uuids: []
+
+blacklist:
+  ips: []
+  cidrs: []
+  players: []
+  uuids: []
+  asns: []
+
+temporary-bypass:
+  enabled: true
+
+# -----------------------------------------------------------------------------
+#  Connection rate limiting. See docs/RATE-LIMIT.md.
+# -----------------------------------------------------------------------------
+rate-limit:
+  enabled: true
+  max-connections-per-ip: 5
+  window-seconds: 10
+  max-connections-per-player: 10
+  player-window-seconds: 10
+
+# -----------------------------------------------------------------------------
+#  Fallback policy - what happens when every provider failed/timed out.
+#  FAIL_OPEN (default): allow, logged, so a provider outage never locks the
+#    whole network out.
+#  FAIL_CLOSED: block until a provider is reachable again.
+#  REQUIRE_VERIFICATION: middle ground.
+#  See docs/PROVIDERS.md#fallback.
+# -----------------------------------------------------------------------------
+fallback:
+  policy: FAIL_OPEN
+
+# -----------------------------------------------------------------------------
+#  Metrics
+# -----------------------------------------------------------------------------
+metrics:
+  enabled: true
+
+# -----------------------------------------------------------------------------
+#  Privacy - see docs/PRIVACY.md for exactly what is stored and for how long.
+# -----------------------------------------------------------------------------
+privacy:
+  # If false (default), raw IP addresses are never persisted in risk
+  # profiles - only a salted hash is kept, which is enough to correlate
+  # repeat connections without storing the address itself.
+  store-raw-ip: false
+  # CHANGE THIS on every installation. Used to salt IP hashes so they are
+  # not comparable across independently-run networks and cannot be reversed
+  # via a plain rainbow table.
+  hash-salt: "change-me-please-set-a-real-random-salt"
+  retention-days: 7
+
+# -----------------------------------------------------------------------------
+#  Platform-specific behaviour
+# -----------------------------------------------------------------------------
+velocity:
+  # Run the analysis as early as possible (during login), before the player
+  # is routed to a backend server.
+  early-check: true
+  # Forward the computed result to the backend server via a plugin
+  # messaging channel so Paper/Purpur never re-run detection for the same session.
+  forward-result-to-backend: true
+
+paper:
+  # If a proxy-forwarded result exists for this session, reuse it instead of
+  # querying providers again.
+  reuse-proxy-result: true
+
+purpur:
+  {}
+
+bungeecord:
+  early-check: true

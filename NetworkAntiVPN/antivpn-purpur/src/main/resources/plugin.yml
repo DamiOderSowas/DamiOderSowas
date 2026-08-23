@@ -1,0 +1,51 @@
+name: NetworkAntiVPN-Purpur
+version: 1.0.0-SNAPSHOT
+main: de.justsimplenetworks.antivpn.integration.purpur.PurpurAntiVpnPlugin
+api-version: "1.21"
+author: JustSimpleNetworks
+description: Standalone Anti-VPN/Anti-Proxy detection for JustSimpleNetworks Minecraft networks (Purpur build).
+website: https://github.com/JustSimpleNetworks/NetworkAntiVPN
+
+commands:
+  antivpn:
+    description: NetworkAntiVPN admin command.
+    usage: /antivpn <check|checkip|inspect|debug|reload|status|providers|cache|whitelist|blacklist|bypass|trust|untrust>
+    aliases: [networkantivpn, avpn]
+
+permissions:
+  network.antivpn.admin:
+    description: Grants every NetworkAntiVPN permission.
+    default: op
+  network.antivpn.check:
+    description: Allows /antivpn check and /antivpn checkip.
+    default: op
+  network.antivpn.inspect:
+    description: Allows /antivpn inspect.
+    default: op
+  network.antivpn.debug:
+    description: Allows /antivpn debug.
+    default: op
+  network.antivpn.reload:
+    description: Allows /antivpn reload.
+    default: op
+  network.antivpn.status:
+    description: Allows /antivpn status.
+    default: op
+  network.antivpn.providers:
+    description: Allows /antivpn providers.
+    default: op
+  network.antivpn.cache:
+    description: Allows /antivpn cache.
+    default: op
+  network.antivpn.whitelist:
+    description: Allows /antivpn whitelist.
+    default: op
+  network.antivpn.blacklist:
+    description: Allows /antivpn blacklist.
+    default: op
+  network.antivpn.bypass:
+    description: Allows /antivpn bypass.
+    default: op
+  network.antivpn.trust:
+    description: Allows /antivpn trust and /antivpn untrust.
+    default: op

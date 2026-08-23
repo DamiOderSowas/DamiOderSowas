@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+repositories {
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+}
+
+dependencies {
+    implementation project(':antivpn-core')
+    compileOnly 'net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT'
+    implementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+}
+
+shadowJar {
+    archiveBaseName.set('NetworkAntiVPN-BungeeCord')
+    archiveClassifier.set('')
+    relocate 'org.yaml.snakeyaml', 'de.justsimplenetworks.antivpn.libs.snakeyaml'
+    relocate 'com.google.gson', 'de.justsimplenetworks.antivpn.libs.gson'
+}
+
+build.dependsOn shadowJar
